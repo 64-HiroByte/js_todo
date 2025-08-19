@@ -8,26 +8,23 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <body class="bg-light">
-  <div class="container card w-50 my-5 shadow">
+  <div class="todoapp container card w-50 my-5 shadow">
     <h1 class="text-center mt-5">Todo App</h1>
     <form id="js-form">
       <input type="text" id="js-form-input" class="new-todo form-control" placeholder="タスクを入力してください" autocomplete="off">
       <button type="submit" class="btn btn-primary">保存</button>
     </form>
     <!-- Todo list -->
-    <div id="js-todo-list" class="todolist">
-      <ul id="ul" class="list-group text-secondary mt-3">
-        <!-- 動的に更新されるTodoリスト -->
-      </ul>
+    <div id="js-todo-list" class="todo-list">
+      <!-- <ul id="ul" class="list-group text-secondary mt-3"></ul> -->
     </div>
-    <!-- <hr> -->
+
+    <!-- Todoアイテムの数と状態 -->
     <footer class="footer">
-      <!-- Todoアイテムの数と状態 -->
       <span id="js-todo-count">Todoアイテム数: 0</span>
-      
     </footer>
   </div>
-  <!-- JavaScript -->
+
   <script type="module" src="index.js"></script>
 </body>
 </html>
