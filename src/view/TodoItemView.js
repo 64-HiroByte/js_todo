@@ -10,13 +10,15 @@ export class TodoItemView {
    */
   createElement(todoItem, { onUpdateTodo, onDeleteTodo }) {
     const todoItemElement = todoItem.completed
-      ? element`<li><input type="checkbox" class="checkbox" checked>
+      ? element`<li class="list-group-item"><input type="checkbox" class="checkbox" checked>
                     <s>${todoItem.title}</s>
-                    <button class="delete">x</button>
-                </li>`
-      : element`<li><input type="checkbox" class="checkbox">
+                    <button class="btn btn-success edit">編集</button>
+                    <button class="btn btn-danger delete">削除</button>
+                    </li>`
+                    : element`<li class="list-group-item"><input type="checkbox" class="checkbox">
                     ${todoItem.title}
-                    <button class="delete">x</button>
+                    <button class="btn btn-success edit">編集</button>
+                    <button class="btn btn-danger delete">削除</button>
                 </li>`;
     const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
     inputCheckboxElement.addEventListener("change", () => {
