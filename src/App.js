@@ -69,6 +69,9 @@ export class App {
             },
             onDeleteTodo: ({ id }) => {
                 this.#handleDelete({ id });
+            },
+            onEditTodo: ({ id, title }) => {
+                this.#handleEdit({ id, title });
             }
         });
         render(todoListElement, todoListContainerElement);
@@ -81,6 +84,10 @@ export class App {
         }
         // todoCountElement.textContent = `Todoアイテム数: ${this.#todoListModel.getTotalCount()}`;
     };
+
+    #handleEdit = ({ id, title }) => {
+        this.#todoListModel.editTodo({ id, title });
+    }
 
     /**
      * アプリとDOMの紐づけを登録する関数

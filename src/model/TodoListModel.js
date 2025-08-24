@@ -111,6 +111,12 @@ export class TodoListModel extends EventEmitter {
         if (!todoItem) {
             return;
         }
-        // Todo: 編集
+        // if (title.trim().length === 0) {
+        if (title.trim().length !== 0) {
+            // return;
+            todoItem.title = title.trim();
+        }
+        // todoItem.title = title.trim();
+        this.emitChange();
     }
 }
