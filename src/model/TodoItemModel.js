@@ -23,6 +23,9 @@ export class TodoItemModel {
    * @returns {boolean}
    */
   isEmptyTitle() {
-    return this.title.length === 0;
+    let title;
+    title = this.title.trim();  // 前後のスペースを削除する
+    return title.length === 0;
+    // return this.title.length === 0;
   }
 }

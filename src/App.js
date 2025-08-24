@@ -1,9 +1,3 @@
-// export class App {
-//     constructor() {
-//         console.log('App initialized');
-//     }
-// }
-
 import { render } from "./view/html-util.js";
 import { TodoListView } from "./view/TodoListView.js";
 import { TodoItemModel } from "./model/TodoItemModel.js";
@@ -78,7 +72,14 @@ export class App {
             }
         });
         render(todoListElement, todoListContainerElement);
-        todoCountElement.textContent = `Todoアイテム数: ${this.#todoListModel.getTotalCount()}`;
+        const totalCount = this.#todoListModel.getTotalCount();
+        const completedCount = this.#todoListModel.getCompletedCount();
+        if (totalCount > 0) {
+            todoCountElement.textContent = `Todoアイテム数: ${totalCount},  完了済み: ${completedCount} , 未完了: ${totalCount - completedCount}`;
+        } else {
+            todoCountElement.textContent = 'タスクが登録されていません';
+        }
+        // todoCountElement.textContent = `Todoアイテム数: ${this.#todoListModel.getTotalCount()}`;
     };
 
     /**

@@ -19,6 +19,21 @@ export class TodoListModel extends EventEmitter {
     }
 
     /**
+     * TodoItemの完了済みタスクの数を返す
+     * @returns {number}
+     */
+    getCompletedCount() {
+        let completedCount = 0;
+        this.#items.forEach(item => {
+            if (item.completed) {
+                completedCount++;
+            }
+        });
+        // console.log(completedCount);  // 出力確認用、PR提出前に削除する
+        return completedCount;
+    }
+
+    /**
      * 表示できるTodoItemの配列を返す
      * @returns {TodoItemModel[]}
      */
@@ -85,5 +100,17 @@ export class TodoListModel extends EventEmitter {
             return todo.id !== id;
         });
         this.emitChange();
+    }
+
+    /**
+     * 指定したTodoItemのtitleを編集する
+     * @param {{ id:number, title: string }}
+     */
+    editTodo({ id, title }) {
+        const todoItem = this.#items.find(todo => todo.id === id);
+        if (!todoItem) {
+            return;
+        }
+        // Todo: 編集
     }
 }

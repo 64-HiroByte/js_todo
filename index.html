@@ -12,7 +12,8 @@
     <h1 class="text-center mt-5">Todo App</h1>
     <form id="js-form" class="d-flex">
       <input type="text" id="js-form-input" class="new-todo form-control" placeholder="タスクを入力してください" autocomplete="off">
-      <button type="submit" class="btn btn-primary">保存</button>
+      <input type="submit" class="btn btn-primary" value="保存">
+      <!-- <button type="submit" class="btn btn-primary">保存</button> -->
     </form>
     <!-- Todo list -->
     <div id="js-todo-list" class="todo-list">
@@ -20,8 +21,8 @@
     </div>
 
     <!-- Todoアイテムの数と状態 -->
-    <footer class="footer">
-      <span id="js-todo-count">Todoアイテム数: 0</span>
+    <footer class="footer my-3">
+      <span id="js-todo-count" class="d-block text-center">タスクが登録されていません</span>
     </footer>
   </div>
 
