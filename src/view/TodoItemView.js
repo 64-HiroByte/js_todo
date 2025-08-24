@@ -37,13 +37,25 @@ export class TodoItemView {
     // 削除
     const deleteButtonElement = todoItemElement.querySelector(".delete");
     deleteButtonElement.addEventListener("click", () => {
-      if (confirm('本当に削除してよろしいですか？')) {
+      const modalElement = document.getElementById('deleteConfirmModal');
+      const confirmButton = document.getElementById('confirmDeleteBtn');
+      const bsModal = new bootstrap.Modal(modalElement);
+      bsModal.show()
+
+      const handler = () => {
+        onDeleteTodo({ id: todoItem.id });
+        bsModal.hide()
+        confirmButton.removeEventListener('click', handler);
+      };
+      confirmButton.addEventListener('click', handler);
+
+      // if (confirm('本当に削除してよろしいですか？')) {
         
-        // コールバック関数に変更
-        onDeleteTodo({
-          id: todoItem.id
-        });
-      }
+      //   // コールバック関数に変更
+      //   onDeleteTodo({
+      //     id: todoItem.id
+      //   });
+      // }
     });
 
     // 編集
