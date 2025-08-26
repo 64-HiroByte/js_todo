@@ -8,6 +8,7 @@ export class TodoItemModel {
   title;
   /** @type {boolean} Todoアイテムが完了済みならばtrue、そうでない場合はfalse */
   completed;
+
   /**
    * @param {{ title: string, completed: boolean }}
    */
@@ -26,6 +27,5 @@ export class TodoItemModel {
     let title;
     title = this.title.trim();  // 前後のスペースを削除する
     return title.length === 0;
-    // return this.title.length === 0;
   }
 }

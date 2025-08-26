@@ -3,116 +3,72 @@ import { element } from "./html-util.js";
 export class TodoItemView {
   /**
    * `todoItem`に対応するTodoアイテムのHTML要素を作成して返す
-   * @param {TodoItemModel} todoItem
+   * @param {TodoItemModel} todoItem 表示対象のTodoアイテム
    * @param {function({id:number, completed:boolean})} onUpdateTodo チェックボックスの更新イベントリスナー
    * @param {function({id:number})} onDeleteTodo 削除ボタンのクリックイベントリスナー
    * @param {Function({id:number, title:string})} onEditTodo タスクの編集イベントリスナー
-   * @returns {Element}
+   * @returns {Element} Todoアイテムの <li> 要素
    */
   createElement(todoItem, { onUpdateTodo, onDeleteTodo, onEditTodo }) {
-    // const todoItemElement = todoItem.completed
-    //   ? element`
-    //     <li class="list-group-item"><input type="checkbox" class="checkbox" checked>
-    //       <s>${todoItem.title}</s>
-    //       <button class="btn btn-success edit">編集</button>
-    //       <button class="btn btn-danger delete">削除</button>
-    //     </li>`
-    //   : element`
-    //     <li class="list-group-item"><input type="checkbox" class="checkbox">
-    //       ${todoItem.title}
-    //       <button class="btn btn-success edit">編集</button>
-    //       <button class="btn btn-danger delete">削除</button>
-    //     </li>`;
-    // const todoItemElement = element`
-    //   <li class="list-group-item">
-    //     <input type="checkbox" class="checkbox">
-    //     <span class="title">${todoItem.title}</span>
-    //     <button class="btn btn-success edit">編集</button>
-    //     <button class="btn btn-danger delete">削除</button>
-    //   </li>
-    // `;
+    // Todoアイテムのベースを作成（1行分）
     const todoItemElement = element`
-    <li class="list-group-item">
-      <div class="row align-items-center">
-        <div class="col-auto">
-          <input type="checkbox" class="checkbox">
+      <li class="list-group-item">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <input type="checkbox" class="checkbox">
+          </div>
+          <div class="col text-wrap text-break">
+            <span class="title">${todoItem.title}</span>
+          </div>
+          <div class="col-auto d-flex gap-1">
+            <button class="btn btn-success edit">編集</button>
+            <button class="btn btn-danger delete">削除</button>
+          </div>
         </div>
-        <div class="col text-wrap text-break">
-          <span class="title">${todoItem.title}</span>
-        </div>
-        <div class="col-auto d-flex gap-1">
-          <button class="btn btn-success edit">編集</button>
-          <button class="btn btn-danger delete">削除</button>
-        </div>
-      </div>
-    </li>`;
-    // <li class="list-group-item d-flex align-items-center">
-    //   <input type="checkbox" class="checkbox me-2">
-    //   <span class="title flex-grow-1 text-wrap text-break">${todoItem.title}</span>
-    //   <div class="d-flex ms-auto align-items-center gap-1">
-    //     <button class="btn btn-success btn-sm edit">編集</button>
-    //     <button class="btn btn-danger btn-sm delete">削除</button>
-    //   </div>
-    // </li>`;
+      </li>
+    `;
 
-    // completed の場合だけUIを調整
+    // completed=true の場合、UIに反映（チェック済み、取り消し線を追加）
     if (todoItem.completed) {
       const checkbox = todoItemElement.querySelector(".checkbox");
       const titleSpan = todoItemElement.querySelector(".title");
       checkbox.checked = true;
       titleSpan.className = 'text-decoration-line-through';
-      // titleSpan.innerHTML = `<s>${todoItem.title}</s>`;
     }
 
-
-    // チェックボックス
+    // --- チェックボックス更新イベント ---
     const inputCheckboxElement = todoItemElement.querySelector(".checkbox");
     inputCheckboxElement.addEventListener("change", () => {
-      // コールバック関数に変更
+      // モデル更新のコールバック呼び出し
       onUpdateTodo({
         id: todoItem.id,
         completed: !todoItem.completed
       });
     });
 
-    // 削除
-    const deleteButtonElement = todoItemElement.querySelector(".delete");
-    deleteButtonElement.addEventListener("click", () => {
-      const modalElement = document.getElementById('deleteConfirmModal');
-      const confirmButton = document.getElementById('confirmDeleteBtn');
-      const modalBodyElement = document.getElementById('js-modal-body');
-      modalBodyElement.innerHTML = `タスク: 「${todoItem.title}」を削除しますか？`;
-      
-      const bsModal = new bootstrap.Modal(modalElement);
-      bsModal.show();
-      
-      const handleConfirmDelete = () => {
-        onDeleteTodo({ id: todoItem.id });
-        bsModal.hide();
-        confirmButton.removeEventListener('click', handleConfirmDelete);
-      };
-      confirmButton.addEventListener('click', handleConfirmDelete);
-    });
-    // 編集ボタン
+    
+    // --- 編集ボタンイベント ---
     const editButtonElement = todoItemElement.querySelector(".edit");
     editButtonElement.addEventListener("click", () => {
-      // 編集モードUIを element テンプレートで作成
+      // 編集用UIを作成
       const editElement = element`
       <form class="d-flex w-100 gap-2">
         <input type="text" class="form-control" value="${todoItem.title}">
         <input type="submit" class="btn btn-primary" value="保存">
-      </form>`;
-      // <button type="submit" class="btn btn-primary">保存</button>
-    
-      // li の中身を編集フォームに置き換える
+      </form>
+      `;
+      
+      // li の中身を編集フォームに置換
       todoItemElement.innerHTML = "";
       todoItemElement.appendChild(editElement);
       
-      // 保存イベント
+      // フォーム送信（保存処理）
       editElement.addEventListener("submit", (submitEvent) => {
         submitEvent.preventDefault();
         const input = editElement.querySelector("input");
         const newTitle = input.value.trim();
+
+        // 空文字の場合は、編集前のタスク（title）に戻す
         if (newTitle.length > 0) {
           onEditTodo({ id: todoItem.id, title: newTitle });
         } else {
@@ -120,32 +76,31 @@ export class TodoItemView {
         }
       });
     });
-    // // 編集
-    // const editButtonElement = todoItemElement.querySelector('.edit');
-    // editButtonElement.addEventListener('click', () => {
-    //   // 編集モードUI
-    //   const editElement = document.createElement('div');
-    //   editElement.className = 'd-flex gap-2'
-    //   const inputElement = document.createElement('input');
-    //   inputElement.className = 'form-control';
-    //   inputElement.value = todoItem.title;
-    //   const saveButtonElement = document.createElement('input');
-    //   saveButtonElement.type = 'submit'
-    //   saveButtonElement.value = '保存';
-    //   saveButtonElement.className = 'btn btn-primary ms-2';
-    //   editElement.appendChild(inputElement);
-    //   editElement.appendChild(saveButtonElement);
 
-    //   // liをクリア
-    //   todoItemElement.innerHTML = ''
-    //   // 編集モードUIを挿入
-    //   todoItemElement.appendChild(editElement);
+    // --- 削除ボタンイベント ---
+    const deleteButtonElement = todoItemElement.querySelector(".delete");
+    deleteButtonElement.addEventListener("click", () => {
+      // Bootstrapのモーダルを使用
+      const modalElement = document.getElementById('deleteConfirmModal');
+      const confirmButton = document.getElementById('confirmDeleteBtn');
+      const modalBodyElement = document.getElementById('js-modal-body');
 
-    //   saveButtonElement.addEventListener('click', () => {
-    //     const newTitle = inputElement.value;
-    //     onEditTodo({ id: todoItem.id, title: newTitle});
-    //   });
-    // });
+      // モーダルの本文に削除対象のタスク（title）を埋め込む
+      modalBodyElement.innerHTML = `タスク: 「${todoItem.title}」を削除しますか？`;
+
+      // モーダルを表示
+      const bsModal = new bootstrap.Modal(modalElement);
+      bsModal.show();
+
+      // ボタンクリック時の処理
+      const handleConfirmDelete = () => {
+        onDeleteTodo({ id: todoItem.id });
+        bsModal.hide();
+        // 二重登録を防ぐためにリスナーを解除
+        confirmButton.removeEventListener('click', handleConfirmDelete);
+      };
+      confirmButton.addEventListener('click', handleConfirmDelete);
+    });
 
     // 作成したTodoアイテムのHTML要素を返す
     return todoItemElement;
