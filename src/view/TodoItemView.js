@@ -61,6 +61,12 @@ export class TodoItemView {
       // li の中身を編集フォームに置換
       todoItemElement.innerHTML = "";
       todoItemElement.appendChild(editElement);
+
+      // 編集中は編集対象外のアイテムのボタンを無効化する
+      document.querySelectorAll('.edit, .delete').forEach(btn => {
+        btn.disabled = true;
+      });
+      editButtonElement.disabled = false;
       
       // フォーム送信（保存処理）
       editElement.addEventListener("submit", (submitEvent) => {
