@@ -32,14 +32,28 @@ export class TodoItemView {
     //   </li>
     // `;
     const todoItemElement = element`
-    <li class="list-group-item d-flex align-items-center">
-      <input type="checkbox" class="checkbox me-2">
-      <span class="title flex-grow-1 text-wrap">${todoItem.title}</span>
-      <div class="ms-auto gap-1">
-        <button class="btn btn-success edit">編集</button>
-        <button class="btn btn-danger delete">削除</button>
+    <li class="list-group-item">
+      <div class="row align-items-center">
+        <div class="col-auto">
+          <input type="checkbox" class="checkbox">
+        </div>
+        <div class="col text-wrap text-break">
+          <span class="title">${todoItem.title}</span>
+        </div>
+        <div class="col-auto d-flex gap-1">
+          <button class="btn btn-success edit">編集</button>
+          <button class="btn btn-danger delete">削除</button>
+        </div>
       </div>
     </li>`;
+    // <li class="list-group-item d-flex align-items-center">
+    //   <input type="checkbox" class="checkbox me-2">
+    //   <span class="title flex-grow-1 text-wrap text-break">${todoItem.title}</span>
+    //   <div class="d-flex ms-auto align-items-center gap-1">
+    //     <button class="btn btn-success btn-sm edit">編集</button>
+    //     <button class="btn btn-danger btn-sm delete">削除</button>
+    //   </div>
+    // </li>`;
 
     // completed の場合だけUIを調整
     if (todoItem.completed) {
@@ -84,7 +98,7 @@ export class TodoItemView {
     editButtonElement.addEventListener("click", () => {
       // 編集モードUIを element テンプレートで作成
       const editElement = element`
-      <form class="d-flex gap-2">
+      <form class="d-flex w-100 gap-2">
         <input type="text" class="form-control" value="${todoItem.title}">
         <input type="submit" class="btn btn-primary" value="保存">
       </form>`;
